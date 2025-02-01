@@ -1,5 +1,5 @@
 import pandas as pd
-import joblib
+from pickle import dump
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
@@ -66,14 +66,20 @@ if __name__ == "__main__":
         
         # Normalizing numerical data
         scaler = StandardScaler()
-        numerical_cols = ['person_age', 'person_income', 'loan_amnt', 'loan_int_rate', 'loan_percent_income', 'person_emp_length']
+        numerical_cols = ['person_age', 'person_income', 'loan_amnt', 
+                          'loan_int_rate', 'loan_percent_income', 'person_emp_length']
+
+        # Ajustando e transformando os dados com o scaler
         base_credit_encoded[numerical_cols] = scaler.fit_transform(base_credit_encoded[numerical_cols])
-        
-        # Saving the scaler for later inference
+
+        # Salvando o scaler para uso posterior
         artifact_dir = f'{global_settings.ML_ARTIFACTS_DIRECTORY}/utils'
         ensure_dir(artifact_dir)
-        
-        joblib.dump(scaler, f'{artifact_dir}/scaler.pkl')
+
+        # Salvando o scaler ajustado
+        dump(scaler, open(f'{artifact_dir}/scaler.pkl', 'wb'))
+
+        logging.info("Scaler saved successfully.")
         
         logging.info("Numerical data normalized and scaler saved for inference.")
         logging.info(f"DataFrame:\n {base_credit_encoded.head(15)}")
