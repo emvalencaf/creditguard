@@ -1,14 +1,14 @@
 from io import BytesIO
 import io
 import aiohttp
-from os.path import join
+from os.path import join,abspath,dirname
 import asyncio
 from googleapiclient.http import MediaIoBaseDownload
 
 from cloud import get_google_drive_service
 
 # Where models folder in the deployed backend
-REMOTE_MODEL_FOLDER = "artifacts/models"
+REMOTE_MODEL_FOLDER = "./artifacts/models"
 
 async def download_google_drive_file(file_id: str,
                                      local_filename: str) -> str:

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 
@@ -13,12 +13,11 @@ router = APIRouter(tags=['machine learning',
 
 @router.post('/loan_default')
 def predict_default(loan_application: LoanApplicationSchema,
-                          model: RandomForestClassifier = Depends(get_model),
-                          scaler: StandardScaler = Depends(get_scaler)):
+                    model: RandomForestClassifier = Depends(get_model),
+                    scaler: StandardScaler = Depends(get_scaler)):
     """
     Predict if loan application will result in a default
     """
-    
     prediction = get_default_prediction(model=model,
                                         loan_application=loan_application,
                                         scaler=scaler)
