@@ -1,4 +1,13 @@
+import datetime
 import streamlit as st
+import requests
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="./.env")
+
+BACKEND_URL= getenv("BACKEND_URL",
+                    "http://localhost:8000/api/v1/loan_default")
 
 def main():
     st.title("CreditGuard - Loan Application Form")
@@ -69,7 +78,10 @@ def main():
             errors = []
             if has_dependents == "Yes" and n_dependents <= 0:
                 errors.append("If applicant has dependents, number of dependents must be at least 1.")
-            
+            today = datetime.date.today()
+
+            if birthdate >= today:
+                errors.append("Date of Birth must be in the past (not today or a future date).")
             if int_rate <= 0:
                 errors.append("Interest Rate must be greater than 0.")
             if yearly_income <= 0:
@@ -83,28 +95,42 @@ def main():
                 for error in errors:
                     st.error(error)
             else:
-                
+                birthdate_str = birthdate.strftime("%Y-%m-%d")                
                 # payload
                 payload = {
-                    "name" : name,
-                    "birthdate" : birthdate,
-                    "loan_intent" : loan_intent,
-                    "housing_status" : housing_status,
-                    "has_dependents" : has_dependents,
-                    "n_dependents" : n_dependents if has_dependents == "Yes" else 0,
-                    "int_rate" : int_rate,
-                    "employement_hist" : employement_hist,
-                    "profession" : profession,
-                    "loan_grade" : loan_grade,
-                    "marital_status" : marital_status,
-                    "yearly_income" : marital_status,
-                    "loan_amount" : loan_amount,
-                    "education" : education,
-                    "has_default_history" : has_default_history,
-                    "defaults" : defaults if has_default_history == "Yes" else 0,
+                    "applicant_name": name,
+                    "applicant_birthdate": birthdate_str,
+                    "applicant_loan_intent": loan_intent,
+                    "applicant_housing_status": housing_status,
+                    "applicant_profession": profession,
+                    "applicant_has_dependents": has_dependents,
+                    "applicant_n_dependents": n_dependents if has_dependents == "Yes" else 0,
+                    "applicant_marital_status": marital_status,
+                    "applicant_employement_hist": employement_hist,
+                    "applicant_yearly_income": yearly_income,  # Certifique-se de passar um número válido
+                    "applicant_education": education,
+                    "applicant_has_default_history": has_default_history,
+                    "applicant_defaults": defaults if has_default_history == "Yes" else 0,
+                    "loan_int_rate": int_rate,
+                    "loan_amount": loan_amount,
+                    "loan_grade": loan_grade
                 }
                 
                 st.success("Application submitted successfully!")
+                try:
+                    response = requests.post(BACKEND_URL, json=payload)
+                    response.raise_for_status()  # Levanta um erro se a resposta não for 200
+                    result = response.json()  # Exemplo de resposta {"result": true} ou {"result": false}
+                    print("result: ", result)
+                    if result.get("prediction", False):
+                        st.warning("This applicant is likely to default on the loan.")
+                    else:
+                        st.success("This applicant is unlikely to default on the loan.")
+                    
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Error contacting the backend: {e}")
+                
+                # Exibe resumo da aplicação
                 st.write("### Application Summary")
                 st.write(f"**Payload**: {payload}")
                 st.write(f"**Name:** {name}")
