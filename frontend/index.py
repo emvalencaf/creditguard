@@ -121,7 +121,6 @@ def main():
                     response = requests.post(BACKEND_URL, json=payload)
                     response.raise_for_status()  # Levanta um erro se a resposta não for 200
                     result = response.json()  # Exemplo de resposta {"result": true} ou {"result": false}
-                    print("result: ", result)
                     if result.get("prediction", False):
                         st.warning("This applicant is likely to default on the loan.")
                     else:
@@ -132,7 +131,6 @@ def main():
                 
                 # Exibe resumo da aplicação
                 st.write("### Application Summary")
-                st.write(f"**Payload**: {payload}")
                 st.write(f"**Name:** {name}")
                 st.write(f"**Date of Birth:** {birthdate}")
                 st.write(f"**Reason for Loan:** {loan_intent}")
