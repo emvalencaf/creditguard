@@ -1,7 +1,7 @@
 from os import path
 import logging
 
-from config import global_settings
+from config import etl_settings
 from helpers.makedir import ensure_dir
 from helpers.datetime_partition import get_datetime_partition, get_timestamp
 
@@ -12,7 +12,7 @@ def get_logging():
     """
     date_dir = get_datetime_partition()
     
-    log_dir = f'{global_settings.LOG_DIRECTORY}/{date_dir}'
+    log_dir = f'{etl_settings.LOG_DIRECTORY}/{date_dir}'
     
     ensure_dir(directory=log_dir)
 
@@ -26,3 +26,4 @@ def get_logging():
     
     return logging
 
+etl_logging = get_logging()

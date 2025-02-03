@@ -2,6 +2,8 @@ from pydantic_settings import BaseSettings
 from os import getenv
 
 class ETLConfig(BaseSettings):
+    DB_URL: str = getenv("DB_URL",
+                         "postgresql+psycopg2://postgres:root@localhost/postgres")
     RAW_PARTITION: str = getenv("RAW_PARTITION",
                                 "../dataset/raw/credit_risk_dataset.csv")
     TRUSTED_PARTITION:str = getenv("TRUSTED_PARTITION",
