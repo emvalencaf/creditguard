@@ -8,7 +8,7 @@ def get_features()-> pd.DataFrame:
     
     :return: pandas dataframe
     """
-    return pd.read_csv(f"{ml_settings.FEATURE_PARTITION}/feature.csv")
+    return pd.read_csv(f"{ml_settings.FEATURE_PARTITION}")
 
 def get_target() -> pd.DataFrame:
     """
@@ -16,4 +16,4 @@ def get_target() -> pd.DataFrame:
     
     :return: pandas dataframe
     """
-    return pd.read_csv(f"{ml_settings.TARGET_PARTITION}/target.csv")
+    return pd.read_csv(f"{ml_settings.TARGET_PARTITION}")

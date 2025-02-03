@@ -1,6 +1,5 @@
-from helpers.logging import get_logging
+from helpers.logging import ml_logging
 
-logging = get_logging()
 
 def get_hyperparameters() -> dict:
     """
@@ -8,7 +7,7 @@ def get_hyperparameters() -> dict:
     
     :returns:Dictionary containing hyperparameter settings.
     """
-    logging.info("Retrieving hyperparameters for the model.")
+    ml_logging.info("Retrieving hyperparameters for the model.")
     return {
         'max_depth': None,
         'max_features': 'sqrt',

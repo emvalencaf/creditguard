@@ -26,3 +26,4 @@ def get_logging():
     
     return logging
 
+ml_logging = get_logging()

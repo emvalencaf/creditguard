@@ -2,12 +2,18 @@ from os import getenv
 from pydantic_settings import BaseSettings
 
 class MachineLearningConfig(BaseSettings):
-
+    DB_URL: str = getenv("DB_URL",
+                         "postgresql+psycopg2://postgres:root@localhost/postgres")
+    MODEL_SCALER_ID: int = int(getenv("MODEL_SCALER_ID",2))
+    
+    if not MODEL_SCALER_ID:
+        raise ValueError("MODEL_SCALER_ID is required for read scaler model and scales models features")
+    
     FEATURE_PARTITION:str = getenv("FEATURE_PARTITION",
-                                   "../dataset/features/*/*/*/feature-*.csv")
+                                   "../dataset/features/feature.csv")
     
     TARGET_PARTITION:str = getenv("TARGET_PARTITION",
-                                  "../dataset/features/*/*/*/target-*.csv")
+                                  "../dataset/features/target.csv")
     
     MODEL_PARTITION:str = getenv('MODEL_PARTITION',
                                  "./artifacts/models")

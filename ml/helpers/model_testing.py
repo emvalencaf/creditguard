@@ -4,9 +4,8 @@ from sklearn.metrics import confusion_matrix, classification_report
 from typing import Dict, List, Any
 
 # Project dependencies
-from helpers.logging import get_logging
+from helpers.logging import ml_logging
 
-logging = get_logging()
 
 def compute_confusion_matrix(y_true, y_pred) -> Dict[str, int]:
     """
@@ -62,9 +61,9 @@ def evaluate_model(model: RandomForestClassifier,
     :return: A list of dictionaries containing evaluation metrics.
     """
     inferences = []
-    logging.info("Starting Evaluate model...")
+    ml_logging.info("Starting Evaluate model...")
     for i in range(iterations):
-        logging.info(f"Getting inference {i + 1}/{iterations}..")
+        ml_logging.info(f"Getting inference {i + 1}/{iterations}..")
         y_pred = model.predict(X_test)
         conf_matrix = compute_confusion_matrix(y_test, y_pred)
         report = classification_report(y_test, y_pred, labels=[0, 1], output_dict=True)
@@ -72,7 +71,7 @@ def evaluate_model(model: RandomForestClassifier,
         accuracy = compute_accuracy(conf_matrix)
 
         inference = {**conf_matrix, "accuracy": accuracy, **metrics}
-        logging.info(f"Inference {i + 1}/{iterations} result:\n{inference}")
+        ml_logging.info(f"Inference {i + 1}/{iterations} result:\n{inference}")
 
         inferences.append(inference)
     
