@@ -37,7 +37,7 @@ class GlobalConfig(BaseSettings):
     
     # machine learning model
     MODEL_ARTIFACT_URI: str = str(getenv("MODEL_ARTIFACT_URI",
-                                         "../ml/artifacts/models/rf-1.0.0-1738355033.160973.pkl"))
+                                         "../ml/artifacts/models/rf-1.0.0-*.pkl"))
     SCALER_ARTIFACT_URI: str = str(getenv("SCALER_ARTIFACT_URI",
                                           "../ml/artifacts/utils/scaler.pkl"))
     

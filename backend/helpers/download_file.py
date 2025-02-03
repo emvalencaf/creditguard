@@ -1,7 +1,4 @@
-from io import BytesIO
-import io
-import aiohttp
-from os.path import join,abspath,dirname
+from os.path import join
 import asyncio
 from googleapiclient.http import MediaIoBaseDownload
 

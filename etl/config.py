@@ -1,7 +1,9 @@
 from pydantic_settings import BaseSettings
 from os import getenv
 
-class GlobalConfig(BaseSettings):
+class ETLConfig(BaseSettings):
+    RAW_PARTITION: str = getenv("RAW_PARTITION",
+                                "../dataset/raw/credit_risk_dataset.csv")
     TRUSTED_PARTITION:str = getenv("TRUSTED_PARTITION",
                                    "../dataset/trusted")
     FEATURE_PARTITION:str = getenv("FEATURE_PARTITION",
@@ -18,4 +20,4 @@ class GlobalConfig(BaseSettings):
     class Config:
         case_sensitive = True
         
-global_settings: GlobalConfig = GlobalConfig()
+etl_settings: ETLConfig = ETLConfig()

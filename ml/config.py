@@ -4,10 +4,10 @@ from pydantic_settings import BaseSettings
 class MachineLearningConfig(BaseSettings):
 
     FEATURE_PARTITION:str = getenv("FEATURE_PARTITION",
-                                   "../dataset/features")
+                                   "../dataset/features/*/*/*/feature-*.csv")
     
     TARGET_PARTITION:str = getenv("TARGET_PARTITION",
-                                  "../dataset/features")
+                                  "../dataset/features/*/*/*/target-*.csv")
     
     MODEL_PARTITION:str = getenv('MODEL_PARTITION',
                                  "./artifacts/models")

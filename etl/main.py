@@ -8,7 +8,7 @@ from helpers.datetime_partition import get_datetime_partition, get_timestamp
 from helpers.calc import calculate_expected_loan_percent
 from helpers.logging import get_logging
 from helpers.makedir import ensure_dir
-from config import global_settings
+from config import etl_settings
 
 # Logging configuration
 logging = get_logging()
@@ -16,7 +16,7 @@ logging = get_logging()
 if __name__ == "__main__":
     try:
         logging.info("Starting ETL process.")
-        base_credit = pd.read_csv('../dataset/raw/credit_risk_dataset.csv')
+        base_credit = pd.read_csv(etl_settings.RAW_PARTITION)
         logging.info("Dataset successfully loaded.")
         
         date_dir = get_datetime_partition()
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         trusted_base_credit['person_emp_length'] = base_credit_encoded['person_emp_length']
         trusted_base_credit['loan_int_rate'] = base_credit_encoded['loan_int_rate']
         
-        trusted_dir = f'{global_settings.TRUSTED_PARTITION}/{date_dir}'
+        trusted_dir = f'{etl_settings.TRUSTED_PARTITION}/{date_dir}'
         ensure_dir(trusted_dir)
         filename = f"{get_timestamp()}.csv"
         
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         base_credit_encoded[numerical_cols] = scaler.fit_transform(base_credit_encoded[numerical_cols])
 
         # Salvando o scaler para uso posterior
-        artifact_dir = f'{global_settings.ML_ARTIFACTS_DIRECTORY}/utils'
+        artifact_dir = f'{etl_settings.ML_ARTIFACTS_DIRECTORY}/utils'
         ensure_dir(artifact_dir)
 
         # Salvando o scaler ajustado
@@ -92,8 +92,8 @@ if __name__ == "__main__":
         features = base_credit_encoded[features_cols]
         target = base_credit_encoded['loan_status']
         
-        features_dir = f'{global_settings.FEATURE_PARTITION}/{date_dir}'
-        target_dir = f'{global_settings.FEATURE_PARTITION}/{date_dir}'
+        features_dir = f'{etl_settings.FEATURE_PARTITION}/{date_dir}'
+        target_dir = f'{etl_settings.FEATURE_PARTITION}/{date_dir}'
         
         ensure_dir(features_dir)
         ensure_dir(target_dir)
